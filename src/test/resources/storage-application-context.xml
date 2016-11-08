@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	
+	
+	<bean name="testDataSource"
+        class="org.apache.commons.dbcp2.datasources.SharedPoolDataSource"
+        destroy-method="close" primary="false">
+        <property name="connectionPoolDataSource">
+            <bean
+                class="org.apache.commons.dbcp2.cpdsadapter.DriverAdapterCPDS">
+                <property name="driver" value="org.h2.Driver" />
+                <property name="url"
+                    value="jdbc:h2:mem:test" />
+                <property name="user" value="" />
+                <property name="password" value="" />
+                            
+            </bean>
+        </property>
+    </bean>
+	
+</beans>

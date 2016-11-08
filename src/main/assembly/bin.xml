@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly>
+	<id>component</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<includeBaseDirectory>true</includeBaseDirectory>
+	<dependencySets>
+		<dependencySet>
+			<unpack>false</unpack>
+			<scope>runtime</scope>
+		</dependencySet>
+		<dependencySet>
+			<outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}
+			</outputFileNameMapping>
+			<unpack>false</unpack>
+			<includes>
+				<include>nl.paultegelaar*</include>
+			</includes>
+		</dependencySet>
+	</dependencySets>
+	<fileSets>
+		<fileSet>
+			<directory>src/main/talend</directory>
+			<outputDirectory></outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>target/generated-resources/xml/xslt</directory>
+			<outputDirectory></outputDirectory>
+		</fileSet>
+	</fileSets>
+
+</assembly>

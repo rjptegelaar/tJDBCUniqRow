@@ -12,9 +12,7 @@
 //See the License for the specific language governing permissions and
 //limitations under the License.
 //
-//tOpenEdgePC is not supported, endorsed by or affiliated with Progress Software in any way. Do not contact Progress Software with questions or remarks. Instead open an issue in the issue tracker.
-//
-//"OpenEdge" is a trademark of Progress Software.
+
 <%@ jet 
 	imports="
 		org.talend.core.model.process.INode 
@@ -37,4 +35,4 @@
     String cid = node.getUniqueName();	
 %>
 
-globalMap.put("<%=cid %>_NB_LINE",tos_count_<%=cid %>);
+	globalMap.put("<%=cid %>_NB_LINE", nb_line_<%=cid %>);    

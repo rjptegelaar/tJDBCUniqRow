@@ -16,10 +16,7 @@
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 	See the License for the specific language governing permissions and
 	limitations under the License.
-	
-	tOpenEdgePC is not supported, endorsed by or affiliated with Progress Software in any way. Do not contact Progress Software with questions or remarks. Instead open an issue in the issue tracker.
-	
-	"OpenEdge" is a trademark of Progress Software.
+
 	 -->
 
 	<xsl:variable name="deps" select="document('../../../target/deps.xml')" />
@@ -36,6 +33,7 @@
 	<!-- When matching DataSeriesBodyType: do nothing -->
 	<xsl:template match="IMPORTS">
 		<IMPORTS>
+			<IMPORT NAME="tJDBCUniqRow" MODULE="tJDBCUniqRow.jar" REQUIRED="true"/>
 			<xsl:apply-templates select="$deps/list/dep" />
 		</IMPORTS>
 	</xsl:template>

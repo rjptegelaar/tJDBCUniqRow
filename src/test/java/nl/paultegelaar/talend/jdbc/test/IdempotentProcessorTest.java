@@ -36,7 +36,7 @@ public class IdempotentProcessorTest {
 		}
 		//Just create a table, all in memory anyway
 		Statement st = testDataSource.getConnection().createStatement();
-		st.execute("create table idempotent(id varchar(255) not null unique, created timestamp)");
+		st.execute("create table idempotent(id varchar(255) not null unique)");
 		st.close();
 					
 		
@@ -54,16 +54,16 @@ public class IdempotentProcessorTest {
 	@Test
 	public void happyTest(){
 		
-		Assert.assertTrue(idempotentProcessor.check("test", new Date(), "insert into idempotent values(?, ?)"));
-		Assert.assertTrue(idempotentProcessor.check("test1", new Date(), "insert into idempotent values(?, ?)"));
+		Assert.assertTrue(idempotentProcessor.check("test", "insert into idempotent (id) values(?)"));
+		Assert.assertTrue(idempotentProcessor.check("test1", "insert into idempotent (id) values(?)"));
 		
 	}
 	
 	@Test
 	public void unhappyTest(){
 		
-		Assert.assertTrue(idempotentProcessor.check("test", new Date(), "insert into idempotent values(?, ?)"));
-		Assert.assertFalse(idempotentProcessor.check("test", new Date(), "insert into idempotent values(?, ?)"));
+		Assert.assertTrue(idempotentProcessor.check("test", "insert into idempotent (id) values(?)"));
+		Assert.assertFalse(idempotentProcessor.check("test", "insert into idempotent (id) values(?)"));
 		
 	}
 	
@@ -90,7 +90,7 @@ public class IdempotentProcessorTest {
 		public void run() {
 			System.out.println("Starting run with thread: " + name);
 			for (int i = 0; i < 100; i++) {
-				Assert.assertTrue(idempotentProcessor.check(name + i, new Date(), "insert into idempotent values(?, ?)"));
+				Assert.assertTrue(idempotentProcessor.check(name + i, "insert into idempotent (id) values(?)"));
 			}
 			System.out.println("Done running thread: " + name);
 		}

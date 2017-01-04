@@ -1,111 +1,49 @@
-<?xml version="1.0" encoding="utf-8"?><COMPONENT> 
-<!-- 
-Copyright 2015 Paul Tegelaar
+<?xml version="1.0" encoding="utf-8"?>
+<COMPONENT>
+	<!-- Copyright 2017 Paul Tegelaar Licensed under the Apache License, Version 
+		2.0 (the "License"); you may not use this file except in compliance with 
+		the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+		Unless required by applicable law or agreed to in writing, software distributed 
+		under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+		OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+		the specific language governing permissions and limitations under the License. 
+		-->
+	<HEADER AUTHOR="Talend" COMPATIBILITY="ALL" DATA_AUTO_PROPAGATE="false"
+		PLATEFORM="ALL" RELEASE_DATE="20080229A" SERIAL="" STARTABLE="false"
+		STATUS="ALPHA" SCHEMA_AUTO_PROPAGATE="true" VERSION="0.102">
+		<SIGNATURE />
+	</HEADER>
+	<FAMILIES>
+		<FAMILY>Data_Quality</FAMILY>
+	</FAMILIES>
+	<DOCUMENTATION>
+		<URL />
+	</DOCUMENTATION>
+	<CONNECTORS>
+		<CONNECTOR CTYPE="FLOW" MAX_INPUT="1" MIN_INPUT="1"
+			MAX_OUTPUT="1" />
+	</CONNECTORS>
+	<PARAMETERS>
+		<PARAMETER NAME="connection" FIELD="COMPONENT_LIST"
+			REQUIRED="true" FILTER="tJDBCConnection" NUM_ROW="10"
+			DYNAMIC_SETTINGS="true" />
+		<PARAMETER FIELD="COLUMN_LIST" NAME="idColumn" NUM_ROW="20"
+			REQUIRED="true">
+			<DEFAULT>ID</DEFAULT>
+		</PARAMETER>
+		<PARAMETER FIELD="TEXT" NAME="sqlQuery" NUM_ROW="30"
+			REQUIRED="true">
+			<DEFAULT>"insert into idempotent (id) values(?)"</DEFAULT>
+		</PARAMETER>
+	</PARAMETERS>
+	<ADVANCED_PARAMETERS>
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-tOpenEdgePC is not supported, endorsed by or affiliated with Progress Software in any way. Do not contact Progress Software with questions or remarks. Instead open an issue in the issue tracker.
-
-"OpenEdge" is a trademark of Progress Software.
- -->
-  <HEADER AUTHOR="Talend" COMPATIBILITY="ALL" DATA_AUTO_PROPAGATE="false" PLATEFORM="ALL" RELEASE_DATE="20080229A" SERIAL="" STARTABLE="false" STATUS="ALPHA" SCHEMA_AUTO_PROPAGATE="false" VERSION="0.102"> 
-    <SIGNATURE/> 
-  </HEADER>  
-  <FAMILIES> 
-    <FAMILY>Progress/OpenEdge</FAMILY> 
-  </FAMILIES>  
-  <DOCUMENTATION> 
-    <URL/> 
-  </DOCUMENTATION>  
-  <CONNECTORS> 
-    <CONNECTOR CTYPE="FLOW" MAX_INPUT="1" MIN_INPUT="1" MAX_OUTPUT="1"/> 
-  </CONNECTORS>  
-  <PARAMETERS> 
-    <PARAMETER FIELD="TEXT" NAME="appserverUrl" NUM_ROW="10" REQUIRED="true">
-		 <DEFAULT>"AppServer://localhost:5162/esbbroker1"</DEFAULT>
-	</PARAMETER>
-	<PARAMETER FIELD="TEXT" NAME="username" NUM_ROW="20" REQUIRED="false">
-		 <DEFAULT>"user1"</DEFAULT>
-	</PARAMETER>
-	<PARAMETER FIELD="PASSWORD" NAME="password" NUM_ROW="30" REQUIRED="false">
-	<DEFAULT>""</DEFAULT>
-	</PARAMETER>
-	<PARAMETER FIELD="TEXT" NAME="service" NUM_ROW="40" REQUIRED="false">
-	<DEFAULT>""</DEFAULT>
-	</PARAMETER>
-	<PARAMETER NAME="session" FIELD="CLOSED_LIST" NUM_ROW="50">
-    	<ITEMS DEFAULT="SessionFree">
-	            <ITEM NAME="SessionManaged" VALUE="0"/>
-	            <ITEM NAME="SessionFree" VALUE="1"/>
-	          </ITEMS>
-    </PARAMETER>
-   	<PARAMETER NAME="SCHEMA" FIELD="SCHEMA_TYPE" NUM_ROW="65"/>
-   	<PARAMETER FIELD="TEXT" NAME="procedureName" NUM_ROW="67" REQUIRED="true">
-		 <DEFAULT>"test.p"</DEFAULT>
-	</PARAMETER>
-    <PARAMETER NAME="procedureArguments" FIELD="TABLE" REQUIRED="true" NUM_ROW="70" NB_LINES="3">
-      <ITEMS>
-        <ITEM NAME="COLUMN" FIELD="COLUMN_LIST"/>
-
-        <ITEM NAME="TYPE" FIELD="CLOSED_LIST">
-          <ITEMS DEFAULT="IN">
-            <ITEM VALUE="INPUT" NAME="IN"/>
-            <ITEM VALUE="OUTPUT" NAME="OUT"/>
-            <ITEM VALUE="INPUT_OUTPUT" NAME="IN-OUT"/>
-          </ITEMS>
-        </ITEM>
-         <ITEM NAME="DBTYPE" FIELD="CLOSED_LIST">
-	         <ITEMS DEFAULT="STRING">
-	            <ITEM VALUE="BOOLEAN" NAME="LOGICAL"/>
-	            <ITEM VALUE="DATE" NAME="DATE"/>
-	            <ITEM VALUE="DECIMAL" NAME="DECIMAL"/>
-	          	<ITEM VALUE="INT" NAME="INTEGER"/>
-	            <ITEM VALUE="LONG" NAME="INT64"/>
-	            <ITEM VALUE="STRING" NAME="CHARACTER"/>
-	            <ITEM VALUE="CLOB" NAME="LONGCHAR"/>
-	            <ITEM VALUE="BLOB" NAME="MEMPTR"/>
-	            <ITEM VALUE="DATETIME" NAME="DATETIME"/>
-	            <ITEM VALUE="DATETIMETZ" NAME="DATETIME-TZ"/>
-	          </ITEMS>
-         </ITEM>
-      </ITEMS>
-    </PARAMETER>
-			
-  </PARAMETERS>  
-  <ADVANCED_PARAMETERS>
-    <PARAMETER FIELD="LABEL" NAME="appServerInfoLabel" NUM_ROW="10">
-    	<DEFAULT>Info required by the application service at connection time</DEFAULT>
-    </PARAMETER>       
-    <PARAMETER FIELD="TEXT" NAME="appServerInfo" NUM_ROW="20" REQUIRED="false">
-    <DEFAULT>""</DEFAULT>
-    </PARAMETER>
-        	<PARAMETER NAME="openEdgeJars" FIELD="TABLE" NUM_ROW="75" NB_LINES="3" REQUIRED="true"> 
-	    <ITEMS> 
-	            <ITEM NAME="jarName" FIELD="MODULE_LIST"/> 
-	    </ITEMS> 
-    </PARAMETER> 
-    <PARAMETER FIELD="LABEL" NAME="sleepLabel" NUM_ROW="25">
-    	<DEFAULT>Waiting period per call, gives OpenEdge component time to close connections.</DEFAULT>
-    </PARAMETER> 
-    <PARAMETER FIELD="INTEGER" NAME="sleep" NUM_ROW="30" REQUIRED="true">
-    	<DEFAULT>5</DEFAULT>
-    </PARAMETER> 
-  </ADVANCED_PARAMETERS>  
-    <CODEGENERATION>
-  	<IMPORTS>
-</IMPORTS>
- </CODEGENERATION>
-  <RETURNS> 
-    <RETURN AVAILABILITY="AFTER" NAME="NB_LINE" TYPE="id_Integer"/> 
-  </RETURNS> 
+	</ADVANCED_PARAMETERS>
+	<CODEGENERATION>
+		<IMPORTS>
+		</IMPORTS>
+	</CODEGENERATION>
+	<RETURNS>
+		<RETURN AVAILABILITY="AFTER" NAME="NB_LINE" TYPE="id_Integer" />
+	</RETURNS>
 </COMPONENT>

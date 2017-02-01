@@ -1,40 +1,49 @@
 package nl.paultegelaar.talend.jdbc;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+import org.apache.commons.lang3.ObjectUtils;
 
 public class IdempotentProcessor{
 		
-	private JdbcTemplate jdbcTemplate;
+	private Connection connection;
 	private static final Logger logger = Logger.getLogger("IdempotentProcessor");
 				
 	public IdempotentProcessor(Connection connection) throws SQLException{		
 		
-		logger.info("Initializing IdempotentProcessor using JDBC Connection...");
-		if(connection!=null && connection.getClientInfo()!=null){
-			logger.info(connection.getClientInfo().toString());
+		logger.finest("Initializing IdempotentProcessor using JDBC Connection...");
+		if(ObjectUtils.allNotNull(connection, connection.getClientInfo())){
+			logger.finest(connection.getClientInfo().toString());
 		}else if(connection!=null){
-			logger.info("Failed to retrieve conntection client information");
-		}else{
-			logger.severe("Connection is null, failed to start component.");
+			logger.finest("Failed to retrieve conntection client information");
 		}
-		jdbcTemplate = new JdbcTemplate(new SingleConnectionDataSource(connection, false));
+		
+		if(!connection.getAutoCommit()){
+			logger.warning("Autocommit not enabled on connection, don't forget to commit after each row.");
+		}
+		
+		this.connection = connection;
 
 		
-		logger.info("Done initializing IdempotentProcessor, created JDBCTemplate using Connection.");
+		logger.finest("Done initializing IdempotentProcessor.");
 	}	
 	
-	public boolean check(String identifier, String sqlStatement){
+	public boolean check(String identifier, String sqlStatement) throws SQLException{
+		logger.finest("Checking for ID: " + identifier + " using query " + sqlStatement);
+		PreparedStatement ps = null;
 		try{
-			return jdbcTemplate.update(sqlStatement, identifier)==1;	
-		}catch(Exception e){
+			ps = connection.prepareStatement(sqlStatement);
+			ps.setString(1, identifier);
+			
+			return ps.executeUpdate()==1;	
+		}catch(Exception e){						
 			return false;
+		}finally{			
+			ps.close();
 		}
-		
 	}
 
 	

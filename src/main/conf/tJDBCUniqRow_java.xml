@@ -6,8 +6,7 @@
 		Unless required by applicable law or agreed to in writing, software distributed 
 		under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
 		OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
-		the specific language governing permissions and limitations under the License. 
-		-->
+		the specific language governing permissions and limitations under the License. -->
 	<HEADER AUTHOR="Talend" COMPATIBILITY="ALL" DATA_AUTO_PROPAGATE="false"
 		PLATEFORM="ALL" RELEASE_DATE="20080229A" SERIAL="" STARTABLE="false"
 		STATUS="ALPHA" SCHEMA_AUTO_PROPAGATE="true" VERSION="0.102">
@@ -21,7 +20,11 @@
 	</DOCUMENTATION>
 	<CONNECTORS>
 		<CONNECTOR CTYPE="FLOW" MAX_INPUT="1" MIN_INPUT="1"
-			MAX_OUTPUT="1" />
+			MAX_OUTPUT="0" />
+		<CONNECTOR NAME="UNIQUE" CTYPE="FLOW" MAX_OUTPUT="1" COLOR="086438"
+			BASE_SCHEMA="FLOW" />
+		<CONNECTOR NAME="DUPLICATE" CTYPE="FLOW" MAX_OUTPUT="1"
+			LINE_STYLE="2" COLOR="f36300" BASE_SCHEMA="FLOW" />
 	</CONNECTORS>
 	<PARAMETERS>
 		<PARAMETER NAME="connection" FIELD="COMPONENT_LIST"

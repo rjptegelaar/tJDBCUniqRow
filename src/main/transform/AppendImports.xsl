@@ -32,9 +32,15 @@
 
 	<!-- When matching DataSeriesBodyType: do nothing -->
 	<xsl:template match="IMPORTS">
-		<IMPORTS>
-			<IMPORT NAME="tJDBCUniqRow" MODULE="tJDBCUniqRow.jar" REQUIRED="true"/>
-			<xsl:apply-templates select="$deps/list/dep" />
+		<IMPORTS>			
+			<xsl:element name="IMPORT">
+				<xsl:attribute name="NAME"><xsl:value-of select="concat($deps/list/artifactId,'-',$deps/list/version)"/></xsl:attribute>
+				<xsl:attribute name="MODULE"><xsl:value-of select="concat($deps/list/artifactId,'-',$deps/list/version,'.jar')"/> </xsl:attribute>
+				<xsl:attribute name="REQUIRED"><xsl:text>true</xsl:text></xsl:attribute>
+			</xsl:element>
+			
+			
+			<xsl:apply-templates select="$deps/list/dep[test='false']" />
 		</IMPORTS>
 	</xsl:template>
 

@@ -34,6 +34,55 @@
     INode node = (INode)codeGenArgument.getArgument();
     String cid = node.getUniqueName();	
     
+    String idColumn = ElementParameterParser.getValue(node, "__idColumn__");
+    String sqlQuery = ElementParameterParser.getValue(node, "__sqlQuery__");
 %>
-       
 
+<%
+
+// Search incoming schema
+IMetadataTable inMetadata = null;
+IConnection inConnection = null;
+String inConnectionName = null;
+
+List<? extends IConnection> inConnections = node.getIncomingConnections();
+if (inConnections != null && inConnections.size()>0) { //1 open
+	for (int i = 0; i < inConnections.size(); i++) { //2 open
+		IConnection connection = inConnections.get(i);
+    	if (connection.getLineStyle().hasConnectionCategory(
+    			IConnectionCategory.DATA)) { //3 open
+		    inConnection = connection;
+		    inConnectionName = inConnection.getName();
+		    inMetadata = inConnection.getMetadataTable();
+		    break;
+    	}//3 close
+	}//2 close
+}//1 close
+
+//Iterate over incoming data
+String inRowName = inConnection.getName();
+if (inMetadata != null) {//4 open
+	List<IMetadataColumn> columns = inMetadata.getListColumns();
+	for (int i = 0; i < columns.size(); i++){//5 open
+		IMetadataColumn column = columns.get(i);
+		String inLabelName = column.getLabel();
+		
+		
+		 
+		
+		%>
+		
+		//Check for ID column
+		if("<%=idColumn %>".equals("<%=inLabelName %>")){
+				System.out.println("Name: <%=inLabelName %>");
+				System.out.println("Value: " + <%=inRowName%>.<%=column.getLabel()%>);
+				System.out.println("Duplicate: " + ip_<%=cid %>.check(String.valueOf(<%=inRowName%>.<%=column.getLabel()%>), <%=sqlQuery %>));		
+		}
+				
+		<%
+		
+	}// 5 close
+}//4 close
+
+       
+%>

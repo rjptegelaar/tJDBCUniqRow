@@ -52,7 +52,7 @@ public class IdempotentProcessorTest {
 
 	
 	@Test
-	public void happyTest(){
+	public void happyTest() throws SQLException{
 		
 		Assert.assertTrue(idempotentProcessor.check("test", "insert into idempotent (id) values(?)"));
 		Assert.assertTrue(idempotentProcessor.check("test1", "insert into idempotent (id) values(?)"));
@@ -60,7 +60,7 @@ public class IdempotentProcessorTest {
 	}
 	
 	@Test
-	public void unhappyTest(){
+	public void unhappyTest() throws SQLException{
 		
 		Assert.assertTrue(idempotentProcessor.check("test", "insert into idempotent (id) values(?)"));
 		Assert.assertFalse(idempotentProcessor.check("test", "insert into idempotent (id) values(?)"));
@@ -73,7 +73,7 @@ public class IdempotentProcessorTest {
 		for (int i = 0; i < 5; i++) {
 			TestRunner tr = new TestRunner(idempotentProcessor, String.valueOf(i));
 		}
-		Thread.sleep(10000);
+		Thread.sleep(2000);
 	}
 	
 	public class TestRunner implements Runnable {
@@ -90,7 +90,11 @@ public class IdempotentProcessorTest {
 		public void run() {
 			System.out.println("Starting run with thread: " + name);
 			for (int i = 0; i < 100; i++) {
-				Assert.assertTrue(idempotentProcessor.check(name + i, "insert into idempotent (id) values(?)"));
+				try {
+					Assert.assertTrue(idempotentProcessor.check(name + i, "insert into idempotent (id) values(?)"));
+				} catch (SQLException e) {					
+					e.printStackTrace();
+				}
 			}
 			System.out.println("Done running thread: " + name);
 		}

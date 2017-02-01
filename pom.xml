@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>nl.paultegelaar</groupId>
 	<artifactId>tJDBCUniqRow</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>tJDBCUniqRow</name>
 	<description>Unique row component using a databse for Talend Data Integration.</description>
 	<build>
@@ -27,7 +27,7 @@
 							<outputFile>target/deps.xml</outputFile>
 							<sort>true</sort>
 							
-							<excludeArtifactIds>junit,spring-test,h2,commons-dbcp2,commons-pool2</excludeArtifactIds>
+							<excludeTransitive>true</excludeTransitive>
 						</configuration>
 					</execution>
 				</executions>
@@ -53,11 +53,15 @@
 						</replacement>
 						<replacement>
 							<token>\:([^.]+)$</token>
-							<value>&lt;/dep&gt;&lt;/list&gt;</value>
+							<value>&lt;/dep&gt;&lt;version&gt;${project.version}&lt;/version&gt;&lt;artifactId&gt;${project.artifactId}&lt;/artifactId&gt;&lt;/list&gt;</value>
 						</replacement>
 						<replacement>
 							<token>:compile</token>
-							<value>&lt;/dep&gt;</value>
+							<value>&lt;test&gt;false&lt;/test&gt;&lt;/dep&gt;</value>
+						</replacement>
+						<replacement>
+							<token>:test</token>
+							<value>&lt;test&gt;true&lt;/test&gt;&lt;/dep&gt;</value>
 						</replacement>
 						<replacement>
 							<token>[\s\s\s]+</token>
@@ -80,8 +84,8 @@
 				<configuration>
 					<transformationSets>
 						<transformationSet>
-							<dir>src/main/conf</dir>
-							<stylesheet>src/main/transform/AppendImports.xsl</stylesheet>
+							<dir>src/main/conf</dir>							
+							<stylesheet>src/main/transform/AppendImports.xsl</stylesheet>							
 						</transformationSet>
 					</transformationSets>
 				</configuration>
@@ -154,6 +158,19 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>3.0.4.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>3.0.4.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>1.4.191</version>
@@ -166,22 +183,13 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- SPRING -->
+		<!-- Commons lang -->
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>3.0.4.RELEASE</version>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>3.5</version>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>3.0.4.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-			<version>3.0.4.RELEASE</version>
-		</dependency>
+		
 
 	</dependencies>
 	<scm>

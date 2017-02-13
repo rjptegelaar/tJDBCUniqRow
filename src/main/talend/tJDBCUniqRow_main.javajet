@@ -42,10 +42,16 @@
 
 // Search incoming schema
 IMetadataTable inMetadata = null;
+IMetadataTable uniqueOutMetadata = null;
+IMetadataTable duplicateOutMetadata = null;
 IConnection inConnection = null;
 String inConnectionName = null;
 
 List<? extends IConnection> inConnections = node.getIncomingConnections();
+List<? extends IConnection> connsUnique = node.getOutgoingConnections("UNIQUE");
+List<? extends IConnection> connsDuplicate = node.getOutgoingConnections("DUPLICATE");
+
+
 if (inConnections != null && inConnections.size()>0) { //1 open
 	for (int i = 0; i < inConnections.size(); i++) { //2 open
 		IConnection connection = inConnections.get(i);
@@ -68,21 +74,41 @@ if (inMetadata != null) {//4 open
 		String inLabelName = column.getLabel();
 		
 		
-		 
 		
+		
+		if(idColumn.equals(inLabelName)){//6 open
 		%>
 		
-		//Check for ID column
-		if("<%=idColumn %>".equals("<%=inLabelName %>")){
-				System.out.println("Name: <%=inLabelName %>");
-				System.out.println("Value: " + <%=inRowName%>.<%=column.getLabel()%>);
-				System.out.println("Duplicate: " + ip_<%=cid %>.check(String.valueOf(<%=inRowName%>.<%=column.getLabel()%>), <%=sqlQuery %>));		
-		}
-				
-		<%
 		
+			if(ip_<%=cid %>.check(String.valueOf(<%=inRowName%>.<%=column.getLabel()%>), <%=sqlQuery %>)){//7 open			
+
+			}//7 close
+						
+		<%
+		}//6 close						
 	}// 5 close
 }//4 close
-
-       
 %>
+
+<%
+if (connsUnique!=null) {//8 open
+	if (connsUnique.size()>0) {//9 open
+		for (int j=0;j<connsUnique.size();j++) {//10 open
+			IConnection connUnique = connsUnique.get(j);
+			if (connUnique.getLineStyle().hasConnectionCategory(IConnectionCategory.DATA)) {//11 open
+				uniqueOutMetadata = connUnique.getMetadataTable();
+				
+				if(uniqueOutMetadata!=null){//12 open
+					List<IMetadataColumn> uniqueOutColumnList = uniqueOutMetadata.getListColumns();
+					for (IMetadataColumn uniqueOutColumn : uniqueOutColumnList) {//13 open
+						String uniqueOutLabel = uniqueOutColumn.getLabel();		
+
+					}//13 close	
+				}//12 close
+				
+
+			}//11 close
+		}//10 close
+	}//9 close
+}//8 close				
+%>	

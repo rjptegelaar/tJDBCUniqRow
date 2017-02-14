@@ -46,6 +46,9 @@ IMetadataTable uniqueOutMetadata = null;
 IMetadataTable duplicateOutMetadata = null;
 IConnection inConnection = null;
 String inConnectionName = null;
+IConnection connUnique = null;
+IConnection connDuplicate = null;
+
 
 List<? extends IConnection> inConnections = node.getIncomingConnections();
 List<? extends IConnection> connsUnique = node.getOutgoingConnections("UNIQUE");
@@ -64,8 +67,40 @@ if (inConnections != null && inConnections.size()>0) { //1 open
     	}//3 close
 	}//2 close
 }//1 close
+%>
 
-//Iterate over incoming data
+<%
+if (connsUnique!=null) {//8 open
+	if (connsUnique.size()>0) {//9 open
+		for (int j=0;j<connsUnique.size();j++) {//10 open
+			connUnique = connsUnique.get(j);
+			if (connUnique.getLineStyle().hasConnectionCategory(IConnectionCategory.DATA)) {//11 open
+				uniqueOutMetadata = connUnique.getMetadataTable();				
+				break;	
+			}//11 close
+		}//10 close
+	}//9 close
+}//8 close				
+%>	
+
+<%
+if (connsDuplicate!=null) {//14 open
+	if (connsDuplicate.size()>0) {//15 open
+		for (int j=0;j<connsDuplicate.size();j++) {//16 open
+			connDuplicate = connsDuplicate.get(j);
+			if (connDuplicate.getLineStyle().hasConnectionCategory(IConnectionCategory.DATA)) {//17 open
+				duplicateOutMetadata = connDuplicate.getMetadataTable();				
+				break;	
+			}//17 close
+		}//16 close
+	}//15 close
+}//14 close				
+%>	
+
+boolean <%=cid %>_dupl=false;
+
+<%
+//Iterate over incoming data and check key
 String inRowName = inConnection.getName();
 if (inMetadata != null) {//4 open
 	List<IMetadataColumn> columns = inMetadata.getListColumns();
@@ -74,41 +109,87 @@ if (inMetadata != null) {//4 open
 		String inLabelName = column.getLabel();
 		
 		
-		
-		
 		if(idColumn.equals(inLabelName)){//6 open
 		%>
-		
-		
-			if(ip_<%=cid %>.check(String.valueOf(<%=inRowName%>.<%=column.getLabel()%>), <%=sqlQuery %>)){//7 open			
-
-			}//7 close
-						
+			<%=cid %>_dupl=ip_<%=cid %>.check(String.valueOf(<%=inRowName%>.<%=column.getLabel()%>), <%=sqlQuery %>);						
 		<%
-		}//6 close						
+		}//6 close
+		
+		
+
+						
 	}// 5 close
+		
 }//4 close
+
+
+if(connUnique!=null){//26 open
 %>
 
+	<%=connUnique.getName()%> = null;
+
 <%
-if (connsUnique!=null) {//8 open
-	if (connsUnique.size()>0) {//9 open
-		for (int j=0;j<connsUnique.size();j++) {//10 open
-			IConnection connUnique = connsUnique.get(j);
-			if (connUnique.getLineStyle().hasConnectionCategory(IConnectionCategory.DATA)) {//11 open
-				uniqueOutMetadata = connUnique.getMetadataTable();
-				
-				if(uniqueOutMetadata!=null){//12 open
-					List<IMetadataColumn> uniqueOutColumnList = uniqueOutMetadata.getListColumns();
-					for (IMetadataColumn uniqueOutColumn : uniqueOutColumnList) {//13 open
-						String uniqueOutLabel = uniqueOutColumn.getLabel();		
+}//26 close
 
-					}//13 close	
-				}//12 close
-				
+if(connDuplicate!=null){//27 open
+%>
 
-			}//11 close
-		}//10 close
-	}//9 close
-}//8 close				
-%>	
+	<%=connDuplicate.getName()%> = null;	
+
+<%
+}//27 close
+
+//Iterate over incoming data copy data
+if (inMetadata != null) {//18 open
+	List<IMetadataColumn> columns = inMetadata.getListColumns();
+	
+	
+	%>
+	if(<%=cid %>_dupl){//20 open	
+		<%
+		if (connUnique!=null) {//25 open
+		%>
+			if(<%=columns.size() %>>0){//21
+				<%=connUnique.getName()%> = new <%=connUnique.getName()%>Struct();
+			<%
+			for (int i = 0; i < columns.size(); i++){//19 open
+				IMetadataColumn column = columns.get(i);
+				String inLabelName = column.getLabel();
+				
+				%>
+								
+					<%=connUnique.getName() %>.<%=column.getLabel() %> = <%=inRowName %>.<%=column.getLabel() %>;      							
+				
+				<%				
+			}// 19 close
+			%>
+			}//21 close
+		<%
+		}//25 close
+		%>
+	}else{//20 close, 22 open
+		<%
+		if (connDuplicate!=null){//23 open
+		%>
+			if(<%=columns.size() %>>0){//21 open
+				<%=connDuplicate.getName()%> = new <%=connDuplicate.getName()%>Struct();
+				<%
+				for (int i = 0; i < columns.size(); i++){//19 open
+					IMetadataColumn column = columns.get(i);
+					String inLabelName = column.getLabel();
+					
+					%>
+									
+						<%=connDuplicate.getName() %>.<%=column.getLabel() %> = <%=inRowName %>.<%=column.getLabel() %>;      							
+					
+					<%				
+				}// 19 close
+				%>
+			}//21 close
+		<%
+		}//23 close
+		%>
+	}//22 close
+	<%		
+}//18 close
+%>

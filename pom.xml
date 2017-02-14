@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>nl.paultegelaar</groupId>
 	<artifactId>tJDBCUniqRow</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.4-SNAPSHOT</version>
 	<name>tJDBCUniqRow</name>
 	<description>Unique row component using a databse for Talend Data Integration.</description>
 	<build>

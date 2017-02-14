@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
-import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class IdempotentProcessor{
 		
@@ -14,13 +14,11 @@ public class IdempotentProcessor{
 				
 	public IdempotentProcessor(Connection connection) throws SQLException{		
 		
-		logger.finest("Initializing IdempotentProcessor using JDBC Connection...");
-		if(ObjectUtils.allNotNull(connection, connection.getClientInfo())){
-			logger.finest(connection.getClientInfo().toString());
-		}else if(connection!=null){
-			logger.finest("Failed to retrieve conntection client information");
+		if(connection==null){
+			throw new SQLException("Connection to database is null");
 		}
 		
+		logger.finest("Initializing IdempotentProcessor using JDBC Connection...");		
 		if(!connection.getAutoCommit()){
 			logger.warning("Autocommit not enabled on connection, don't forget to commit after each row.");
 		}
@@ -32,6 +30,12 @@ public class IdempotentProcessor{
 	}	
 	
 	public boolean check(String identifier, String sqlStatement) throws SQLException{
+		
+		
+		if(!StringUtils.isNoneBlank(identifier, sqlStatement)){
+			throw new IllegalArgumentException("ID column and SQL statement cannot be empty");
+		}
+		
 		logger.finest("Checking for ID: " + identifier + " using query " + sqlStatement);
 		PreparedStatement ps = null;
 		try{

@@ -17,6 +17,9 @@
 			<includes>
 				<include>nl.paultegelaar*</include>
 			</includes>
+			<excludes>
+				<exclude>nl.paultegelaar:tJDBCUniqRow</exclude>
+			</excludes>
 		</dependencySet>
 	</dependencySets>
 	<fileSets>

@@ -35,12 +35,20 @@
     String idColumn = ElementParameterParser.getValue(node, "__idColumn__");
     String sqlQuery = ElementParameterParser.getValue(node, "__sqlQuery__");
     String connection = ElementParameterParser.getValue(node,"__connection__");
+    String autoCommitString = ElementParameterParser.getValue(node,"__autocommit__");
+	
+	
+	
 	String conn = "conn_" + connection;
 
 %>
 
+boolean autoCommit_<%=cid%> = Boolean.valueOf(<%=autoCommitString %>);
 int nb_line_<%=cid%> = 0;
+
 java.sql.Connection connection_<%=cid %> = (java.sql.Connection)globalMap.get("<%=conn %>");
+
+connection_<%=cid %>.setAutoCommit(autoCommit_<%=cid%>);
 
 nl.paultegelaar.talend.jdbc.IdempotentProcessor ip_<%=cid %> = new nl.paultegelaar.talend.jdbc.IdempotentProcessor(connection_<%=cid %>);
 

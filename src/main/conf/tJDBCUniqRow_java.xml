@@ -31,6 +31,9 @@
 		<PARAMETER NAME="connection" FIELD="COMPONENT_LIST"
 			REQUIRED="true" FILTER="tJDBCConnection" NUM_ROW="10"
 			DYNAMIC_SETTINGS="true" />
+		<PARAMETER NAME="autocommit" FIELD="CHECK" NUM_ROW="15" REQUIRED="true">
+		    <DEFAULT>true</DEFAULT>  
+    	</PARAMETER>      
 		<PARAMETER FIELD="COLUMN_LIST" NAME="idColumn" NUM_ROW="20"
 			REQUIRED="true">
 			<DEFAULT>ID</DEFAULT>

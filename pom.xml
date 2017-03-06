@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>nl.paultegelaar</groupId>
 	<artifactId>tJDBCUniqRow</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.1</version>
 	<name>tJDBCUniqRow</name>
 	<description>Unique row component using a databse for Talend Data Integration.</description>
 	<build>
@@ -195,7 +195,7 @@
 		<connection>scm:git:https://github.com/rjptegelaar/tJDBCUniqRow.git</connection>
 		<developerConnection>scm:git:git@github.com:rjptegelaar/tJDBCUniqRow.git</developerConnection>
 		<url>https://github.com/rjptegelaar/tJDBCUniqRow.git</url>
-		<tag>HEAD</tag>
+		<tag>tJDBCUniqRow-1.0.1</tag>
 	</scm>
 		<distributionManagement>
 		<repository>

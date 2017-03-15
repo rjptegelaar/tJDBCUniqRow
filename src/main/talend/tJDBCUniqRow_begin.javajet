@@ -48,7 +48,11 @@ int nb_line_<%=cid%> = 0;
 
 java.sql.Connection connection_<%=cid %> = (java.sql.Connection)globalMap.get("<%=conn %>");
 
-connection_<%=cid %>.setAutoCommit(autoCommit_<%=cid%>);
+
+//Must never disable autocommit
+if(autoCommit_<%=cid%>){
+	connection_<%=cid %>.setAutoCommit(autoCommit_<%=cid%>);
+}
 
 nl.paultegelaar.talend.jdbc.IdempotentProcessor ip_<%=cid %> = new nl.paultegelaar.talend.jdbc.IdempotentProcessor(connection_<%=cid %>);
 

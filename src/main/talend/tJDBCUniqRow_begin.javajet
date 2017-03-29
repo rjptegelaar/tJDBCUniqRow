@@ -32,10 +32,11 @@
     INode node = (INode)codeGenArgument.getArgument();
     String cid = node.getUniqueName();	
     
-    String idColumn = ElementParameterParser.getValue(node, "__idColumn__");
+    String idColumn = ElementParameterParser.getValue(node, "__idColumn__");    
     String sqlQuery = ElementParameterParser.getValue(node, "__sqlQuery__");
     String connection = ElementParameterParser.getValue(node,"__connection__");
     String autoCommitString = ElementParameterParser.getValue(node,"__autocommit__");
+    String hashString = ElementParameterParser.getValue(node, "__hash__");
 	
 	
 	
@@ -44,6 +45,8 @@
 %>
 
 boolean autoCommit_<%=cid%> = Boolean.valueOf(<%=autoCommitString %>);
+boolean hash_<%=cid%> = Boolean.valueOf(<%=hashString %>);
+
 int nb_line_<%=cid%> = 0;
 
 java.sql.Connection connection_<%=cid %> = (java.sql.Connection)globalMap.get("<%=conn %>");

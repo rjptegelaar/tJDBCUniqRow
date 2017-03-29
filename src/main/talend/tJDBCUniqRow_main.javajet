@@ -32,12 +32,13 @@
 <% 
     CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
     INode node = (INode)codeGenArgument.getArgument();
-    String cid = node.getUniqueName();	
-    
+    String cid = node.getUniqueName();	    
     String idColumn = ElementParameterParser.getValue(node, "__idColumn__");
     String sqlQuery = ElementParameterParser.getValue(node, "__sqlQuery__");
+    
+    
 %>
-
+	
 <%
 
 // Search incoming schema
@@ -111,7 +112,7 @@ if (inMetadata != null) {//4 open
 		
 		if(idColumn.equals(inLabelName)){//6 open
 		%>
-			<%=cid %>_dupl=ip_<%=cid %>.check(String.valueOf(<%=inRowName%>.<%=column.getLabel()%>), <%=sqlQuery %>);						
+			<%=cid %>_dupl=ip_<%=cid %>.check(String.valueOf(<%=inRowName%>.<%=column.getLabel()%>), <%=sqlQuery %>, hash_<%=cid%>);						
 		<%
 		}//6 close
 		

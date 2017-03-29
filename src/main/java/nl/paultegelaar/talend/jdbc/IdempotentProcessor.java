@@ -18,6 +18,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 
 public class IdempotentProcessor{
@@ -42,12 +43,17 @@ public class IdempotentProcessor{
 		logger.finest("Done initializing IdempotentProcessor.");
 	}	
 	
-	public boolean check(String identifier, String sqlStatement) throws SQLException{
+	public boolean check(String identifier, String sqlStatement, boolean hash) throws SQLException{
 		
 		
 		if(!StringUtils.isNoneBlank(identifier, sqlStatement)){
 			throw new IllegalArgumentException("ID column and SQL statement cannot be empty");
 		}
+		
+		if(hash){
+			identifier = DigestUtils.md2Hex(identifier);	
+		}
+		
 		
 		logger.finest("Checking for ID: " + identifier + " using query " + sqlStatement);
 		PreparedStatement ps = null;

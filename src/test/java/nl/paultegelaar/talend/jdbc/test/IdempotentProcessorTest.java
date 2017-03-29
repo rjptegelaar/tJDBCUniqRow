@@ -67,16 +67,32 @@ public class IdempotentProcessorTest {
 	@Test
 	public void happyTest() throws SQLException{
 		
-		Assert.assertTrue(idempotentProcessor.check("test", "insert into idempotent (id) values(?)"));
-		Assert.assertTrue(idempotentProcessor.check("test1", "insert into idempotent (id) values(?)"));
+		Assert.assertTrue(idempotentProcessor.check("test", "insert into idempotent (id) values(?)", false));
+		Assert.assertTrue(idempotentProcessor.check("test1", "insert into idempotent (id) values(?)", false));
 		
 	}
 	
 	@Test
 	public void unhappyTest() throws SQLException{
 		
-		Assert.assertTrue(idempotentProcessor.check("test", "insert into idempotent (id) values(?)"));
-		Assert.assertFalse(idempotentProcessor.check("test", "insert into idempotent (id) values(?)"));
+		Assert.assertTrue(idempotentProcessor.check("test", "insert into idempotent (id) values(?)", false));
+		Assert.assertFalse(idempotentProcessor.check("test", "insert into idempotent (id) values(?)", false));
+		
+	}
+	
+	@Test
+	public void happyTestHash() throws SQLException{
+		
+		Assert.assertTrue(idempotentProcessor.check("test", "insert into idempotent (id) values(?)", true));
+		Assert.assertTrue(idempotentProcessor.check("test1", "insert into idempotent (id) values(?)", true));
+		
+	}
+	
+	@Test
+	public void unhappyTestHash() throws SQLException{
+		
+		Assert.assertTrue(idempotentProcessor.check("test", "insert into idempotent (id) values(?)", true));
+		Assert.assertFalse(idempotentProcessor.check("test", "insert into idempotent (id) values(?)", true));
 		
 	}
 	
@@ -104,7 +120,7 @@ public class IdempotentProcessorTest {
 			System.out.println("Starting run with thread: " + name);
 			for (int i = 0; i < 100; i++) {
 				try {
-					Assert.assertTrue(idempotentProcessor.check(name + i, "insert into idempotent (id) values(?)"));
+					Assert.assertTrue(idempotentProcessor.check(name + i, "insert into idempotent (id) values(?)", false));
 				} catch (SQLException e) {					
 					e.printStackTrace();
 				}

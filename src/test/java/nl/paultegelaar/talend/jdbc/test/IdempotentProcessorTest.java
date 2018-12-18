@@ -13,9 +13,10 @@
 //limitations under the License.
 package nl.paultegelaar.talend.jdbc.test;
 
+import static org.junit.Assert.*;
+
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Date;
 
 import javax.sql.DataSource;
 
@@ -27,7 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import junit.framework.Assert;
 import nl.paultegelaar.talend.jdbc.IdempotentProcessor;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -67,32 +67,32 @@ public class IdempotentProcessorTest {
 	@Test
 	public void happyTest() throws SQLException{
 		
-		Assert.assertTrue(idempotentProcessor.check("test", "insert into idempotent (id) values(?)", false));
-		Assert.assertTrue(idempotentProcessor.check("test1", "insert into idempotent (id) values(?)", false));
+		assertTrue(idempotentProcessor.check("test", "insert into idempotent (id) values(?)", false));
+		assertTrue(idempotentProcessor.check("test1", "insert into idempotent (id) values(?)", false));
 		
 	}
 	
 	@Test
 	public void unhappyTest() throws SQLException{
-		
-		Assert.assertTrue(idempotentProcessor.check("test", "insert into idempotent (id) values(?)", false));
-		Assert.assertFalse(idempotentProcessor.check("test", "insert into idempotent (id) values(?)", false));
+
+		assertTrue(idempotentProcessor.check("test", "insert into idempotent (id) values(?)", false));
+		assertFalse(idempotentProcessor.check("test", "insert into idempotent (id) values(?)", false));
 		
 	}
 	
 	@Test
 	public void happyTestHash() throws SQLException{
 		
-		Assert.assertTrue(idempotentProcessor.check("test", "insert into idempotent (id) values(?)", true));
-		Assert.assertTrue(idempotentProcessor.check("test1", "insert into idempotent (id) values(?)", true));
+		assertTrue(idempotentProcessor.check("test", "insert into idempotent (id) values(?)", true));
+		assertTrue(idempotentProcessor.check("test1", "insert into idempotent (id) values(?)", true));
 		
 	}
 	
 	@Test
 	public void unhappyTestHash() throws SQLException{
 		
-		Assert.assertTrue(idempotentProcessor.check("test", "insert into idempotent (id) values(?)", true));
-		Assert.assertFalse(idempotentProcessor.check("test", "insert into idempotent (id) values(?)", true));
+		assertTrue(idempotentProcessor.check("test", "insert into idempotent (id) values(?)", true));
+		assertFalse(idempotentProcessor.check("test", "insert into idempotent (id) values(?)", true));
 		
 	}
 	
@@ -100,6 +100,7 @@ public class IdempotentProcessorTest {
 	public void testParallel() throws SQLException, InterruptedException{
 		
 		for (int i = 0; i < 5; i++) {
+			@SuppressWarnings("unused")
 			TestRunner tr = new TestRunner(idempotentProcessor, String.valueOf(i));
 		}
 		Thread.sleep(2000);
@@ -120,7 +121,7 @@ public class IdempotentProcessorTest {
 			System.out.println("Starting run with thread: " + name);
 			for (int i = 0; i < 100; i++) {
 				try {
-					Assert.assertTrue(idempotentProcessor.check(name + i, "insert into idempotent (id) values(?)", false));
+					assertTrue(idempotentProcessor.check(name + i, "insert into idempotent (id) values(?)", false));
 				} catch (SQLException e) {					
 					e.printStackTrace();
 				}

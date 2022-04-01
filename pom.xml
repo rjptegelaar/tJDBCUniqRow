@@ -197,14 +197,14 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.5</version>
+			<version>3.12.0</version>
 		</dependency>
 
 		<!-- Commons codec -->
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
-			<version>1.10</version>
+			<version>1.15</version>
 		</dependency>
 
 	</dependencies>
@@ -216,13 +216,12 @@
 	</scm>
 	<distributionManagement>
 		<repository>
-			<id>bintray</id>
-			<url>https://api.bintray.com/maven/paultegelaar/maven/tJDBCUniqRow</url>
+			<id>talend-components</id>
+			<url>https://pkgs.dev.azure.com/paultegelaar-consultancy/Talend-Components/_packaging/talend-components/maven/v1</url>
 		</repository>
 		<snapshotRepository>
-			<id>pte-snapshots</id>
-			<name>internal snapshots</name>
-			<url>${snapshots-url}</url>
+			<id>talend-components</id>
+			<url>https://pkgs.dev.azure.com/paultegelaar-consultancy/Talend-Components/_packaging/talend-components/maven/v1</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<properties>

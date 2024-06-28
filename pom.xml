@@ -123,6 +123,7 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.5.2</version>
 				<configuration>
+					<arguments>-Dmaven.javadoc.skip=true</arguments>
 					<autoVersionSubmodules>true</autoVersionSubmodules>
 					<remoteTagging>true</remoteTagging>
 					<resume>false</resume>
